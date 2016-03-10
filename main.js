@@ -43,5 +43,15 @@ function main() {
     .attr("cy", function(d){return yScale(d.y)})
     .attr("r",10);
 
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + (height - margin.top) + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + margin.left + ",0)")
+        .call(yAxis);
+
 }
 
