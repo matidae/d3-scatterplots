@@ -16,11 +16,11 @@ d3.csv("./data.csv", function(dataCSV) {
 
 function main() {   
     var xScale = d3.scale.linear()
-        .domain([ d3.min(data, function(d){return d.x;}), d3.max(data, function(d){return d.x;}) ])
+        .domain([d3.min(data, function(d){return d.x;})*0.9, d3.max(data, function(d){return d.x;})*1.1])
         .range([margin.left, width - margin.right]);
 
     var yScale = d3.scale.linear()
-        .domain([ d3.min(data, function(d){return d.y;}), d3.max(data, function(d){return d.y;})])
+        .domain([d3.min(data, function(d){return d.y;})*0.9, d3.max(data, function(d){return d.y;})*1.1])
         .range([margin.bottom, height - margin.top]);
 
     var xAxis = d3.svg.axis()
@@ -46,12 +46,19 @@ function main() {
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0," + (height - margin.top) + ")")
-        .call(xAxis);
+        .call(xAxis)
+        .append("text")
+        .attr("transform", "translate(600, -5)")
+        .text("PC1");
 
     svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(" + margin.left + ",0)")
-        .call(yAxis);
+        .call(yAxis)
+        .append("text")
+        .attr('text-anchor', 'end')
+        .attr("transform", "translate(15, 40) rotate(-90)")
+        .text("PC2");
 
 }
 
