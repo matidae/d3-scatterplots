@@ -36,7 +36,7 @@ function main() {
         .attr("height", height)
         .attr("width", width);
 
-    var cValue = function(d) { return d.z;}, color = d3.scale.category20();
+    var cValue = function(d) { return d.z;}, color = d3.scale.ordinal().domain([1,5]).range(colorbrewer.RdBu[9]);;
 
     svg.selectAll("circle")
     .data(data)
