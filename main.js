@@ -36,12 +36,15 @@ function main() {
         .attr("height", height)
         .attr("width", width);
 
+    var cValue = function(d) { return d.z;}, color = d3.scale.category20();
+
     svg.selectAll("circle")
     .data(data)
     .enter().append("circle")
     .attr("cx", function(d){return xScale(d.x)})
     .attr("cy", function(d){return yScale(d.y)})
-    .attr("r",10);
+    .attr("r",5)
+    .style("fill", function(d){return color(cValue(d));});
 
     svg.append("g")
         .attr("class", "axis")
