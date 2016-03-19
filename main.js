@@ -36,7 +36,7 @@ function main() {
         .attr("height", height)
         .attr("width", width);
 
-    var cValue = function(d) { return d.z;}, color = d3.scale.ordinal().domain([1,5]).range(colorbrewer.RdBu[9]);;
+    var cValue = function(d) { return d.z;}, color = d3.scale.ordinal().domain([1,5]).range(colorbrewer.RdYlGn[9]);;
 
     svg.selectAll("circle")
     .data(data)
@@ -63,5 +63,13 @@ function main() {
         .attr("transform", "translate(15, 40) rotate(-90)")
         .text("PC2");
 
+  $('svg circle').tipsy({ 
+        gravity: 'w', 
+        html: true, 
+        title: function() {
+          var d = this.__data__, c = cValue(d.z);
+          return 'Hi there! My color is <span style="color:' + c + '">' + c + '</span>'; 
+        }
+      });
 }
 
