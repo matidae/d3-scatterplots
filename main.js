@@ -15,12 +15,17 @@ d3.csv("./data2.csv", function(dataCSV) {
 });
 
 function main() {   
+    var xMin = d3.min(data, function(d){return d.x;});
+    var xMax = d3.max(data, function(d){return d.x;});
+    var yMin = d3.min(data, function(d){return d.y;});
+    var yMax = d3.max(data, function(d){return d.y;});
+
     var xScale = d3.scale.linear()
-        .domain([d3.min(data, function(d){return d.x;})*1.1, d3.max(data, function(d){return d.x;})*1.1])
+        .domain([xMin*1.1, xMax*1.1])
         .range([margin.left, width - margin.right]);
 
     var yScale = d3.scale.linear()
-        .domain([d3.min(data, function(d){return d.y;})*1.1, d3.max(data, function(d){return d.y;})*1.1])
+        .domain([yMin*1.1, yMax*1.1])
         .range([height - margin.top, margin.bottom]);
 
     var xAxis = d3.svg.axis()
