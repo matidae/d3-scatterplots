@@ -19,13 +19,15 @@ function main() {
     var xMax = d3.max(data, function(d){return d.x;});
     var yMin = d3.min(data, function(d){return d.y;});
     var yMax = d3.max(data, function(d){return d.y;});
+    var zMin = d3.min(data, function(d){return d.z;});
+    var zMax = d3.max(data, function(d){return d.z;});
 
     var xScale = d3.scale.linear()
-        .domain([xMin*1.1, xMax*1.1])
+        .domain([xMin - Math.abs(xMin)*.2, xMax + Math.abs(xMax)*.2])
         .range([margin.left, width - margin.right]);
 
     var yScale = d3.scale.linear()
-        .domain([yMin*1.1, yMax*1.1])
+        .domain([yMin - Math.abs(yMin)*.2, yMax + Math.abs(yMax)*.2])
         .range([height - margin.top, margin.bottom]);
 
     var xAxis = d3.svg.axis()
@@ -41,7 +43,7 @@ function main() {
         .attr("height", height)
         .attr("width", width);
 
-    var cValue = function(d) { return d.z;}, color = d3.scale.ordinal().domain([d3.min(data, function(d){return d.y;}), d3.max(data, function(d){return d.y;})]).range(colorbrewer.RdYlGn[9]);;
+    var cValue = function(d) { return d.z;}, color = d3.scale.ordinal().domain([zMin, zMax]).range(colorbrewer.RdYlGn[9]);;
 
     svg.selectAll("circle")
     .data(data)
