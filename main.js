@@ -6,6 +6,7 @@ var data;
 
 d3.csv("./data2.csv", function(dataCSV) {
     dataCSV.forEach(function(d){
+        d.name = +d.name;
         d.x = +d.x;
         d.y = +d.y;
         d.z = +d.z;
@@ -52,8 +53,8 @@ function main() {
     .attr("cy", function(d){return yScale(d.y)})
     .attr("r",2)
     .style("fill", function(d){return color(cValue(d));})
-    .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.z);})
-    .on("mousemove", function(d){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px").text(d.z);})
+    .on("mouseover", function(d){return tooltip.style("visibility", "visible");})
+    .on("mousemove", function(d){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px").text(d.name + " - " + d.z);})
     .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
     svg.append("g")
