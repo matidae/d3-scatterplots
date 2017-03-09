@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var selection = $("#selStrain").find(":selected").text();
     if (selection == "Y486") {
-        json_file = "y486.2.json";
+        json_file = "y486.4.json";
         load_data(json_file);
     }
     build_slider(0,6,0.1,"Range of orfogenic index: ");
@@ -12,6 +12,7 @@ function build_slider(min, max, step, lbl_desc) {
     $("#lbl-amount").text(lbl_desc)
     $( "#slider-range" ).slider({
       animate: "slow",
+      delay: 100,
       range: true,
       step: step,
       min: min,
@@ -55,21 +56,21 @@ function slider(a1, a2, selection){
         });
    } else if (selection == "Y486 mapping"){
         circles.each(function(d) {
-            if (d.mapY486 < a1 || d.mapY486 > a2)
+            if (d.mY < a1 || d.mY > a2)
                 d3.select(this).style('visibility','hidden');
             else
                 d3.select(this).style('visibility','visible');
         });
    } else if (selection == "MT1 mapping"){
         circles.each(function(d) {
-            if (d.mapMT1 < a1 || d.mapMT1 > a2)
+            if (d.mM < a1 || d.mM > a2)
                 d3.select(this).style('visibility','hidden');
             else
                 d3.select(this).style('visibility','visible');
         });
    } else if (selection == "Liem mapping"){
         circles.each(function(d) {
-            if (d.mapLiem < a1 || d.mapLiem > a2)
+            if (d.mL < a1 || d.mL > a2)
                 d3.select(this).style('visibility','hidden');
             else
                 d3.select(this).style('visibility','visible');            
@@ -86,21 +87,21 @@ $("#selStrain").on("change",
             $("#tabResults").empty();
             $('#btnClear').css("visibility", "hidden");
             $('#selColor option[value="cov1"]').text("Y486 mapping")
-            json_file = "mt1.2.json";
+            json_file = "mt1.4.json";
             $("#scatter").empty();
             load_data(json_file);
         } else if (selection == "Y486") {
             $("#tabResults").empty();
             $('#btnClear').css("visibility", "hidden");
             $('#selColor option[value="cov1"]').text("MT1 mapping")
-            json_file = "y486.2.json";
+            json_file = "y486.4.json";
             $("#scatter").empty();
             load_data(json_file);
         } else if (selection == "Liem") {
             $("#tabResults").empty();
             $('#btnClear').css("visibility", "hidden");
             $('#selColor option[value="cov2"]').text("MT1 mapping")
-            json_file = "liem.2.json";
+            json_file = "liem.4.json";
             $("#scatter").empty();
             load_data(json_file);
         }
@@ -110,15 +111,36 @@ function load_data(json_file) {
     $('.cs-loader').css('visibility','visible');
     var selStrain = $("#selStrain").find(":selected").text();
     $.ajax({
-        url: 'http://127.0.0.1/projects/scatter/' + json_file +
+        url: 'http://bioinformatica.fcien.edu.uy/vivax/scatter/' + json_file +
              '?jsoncallback=callback_fun',
         dataType: 'jsonp'
     }).complete(function() {
-        $('.dot').tooltipster({
-            contentAsHTML: true,
-            contentCloning: false,
-            interactive: true,
-            theme: 'tooltipster-borderless'
+        var circles = d3.selectAll("circle");
+        circles.each(function(d) {
+            var id = d.id.replace(".","_");
+            line = "<strong>" + d.id + "</strong><br>OI: " + d.oi + " OE: " +
+                d.oe + "  GC: " + d.gc + " len:" + d.l;
+            if (selStrain == "Y486") {
+                line += "<br>MT1 map:" + d.mM + " Liem map:" +
+                    d.mL + "<br>" + d.d.replace(/ /g, "<br>");
+            } else if (selStrain == "MT1") {
+                line += "<br>Y486 map:" + d.mY + "Liem map:" +
+                    d.mL + "<br>" + d.d.replace(/ /g, "<br>");
+            } else if (selStrain == "Liem") {
+                line += "<br>Y486 map:" + d.mY + " MT1 map:" +
+                    d.mM +  "<br>" + d.d.replace(/ /g, "<br>");
+            }
+
+            $('#' + id).tipso({
+                tooltipHover: true,
+                color: '#ffffff',
+                background: '#3c3c3c',
+                useTitle: true,
+                titleBackground: '#333355',
+                titleColor: '#ffffff',
+                width: 300,
+                content: line
+            });
         });
         $('.cs-loader').css('visibility','hidden');
         $('#div_right').css('visibility','visible');
@@ -132,18 +154,18 @@ function load_data(json_file) {
                     $('#btnClear').css("visibility", "visible");
                 if ($("#tr_" + sel_id).length == 0) {
                     entry = "<tr id='tr_" + sel_id + "'><th class='th_right'>" +
-                            "<a target='_blank' href='./nuc/" + sel_id + ".fasta' >" + sel_data.id + 
+                            "<a target='_blank' href='./nuc/" + sel_data.id + ".fasta' >" + sel_data.id + 
                             "</a></th>" + "<th class='th_left'>" + 
                             "OI: " + sel_data.oi.toFixed(2) + 
                             " OE: " + parseFloat(sel_data.oe).toFixed(2) + 
                             " GC: " + parseFloat(sel_data.gc).toFixed(2) + "<br>"
                     if (selStrain == "Y486")
-                        entry += "MT1_map: " + parseFloat(sel_data.mapMT1).toFixed(2) + " Liem_map:" + parseFloat(sel_data.mapLiem).toFixed(2) + "<br>";
+                        entry += "MT1_map: " + parseFloat(sel_data.mM).toFixed(2) + " Liem_map:" + parseFloat(sel_data.mL).toFixed(2) + "<br>";
                     else if (selStrain == "MT1")
-                        entry += "Y486_map: " + parseFloat(sel_data.mapY486).toFixed(2) + " Liem_map:" + parseFloat(sel_data.mapLiem).toFixed(2) + "<br>";
+                        entry += "Y486_map: " + parseFloat(sel_data.mY).toFixed(2) + " Liem_map:" + parseFloat(sel_data.mL).toFixed(2) + "<br>";
                     else if (selStrain == "Liem")
-                        entry += "Y486_map:" + parseFloat(sel_data.mapY486).toFixed(2) + " MT1_map:" + parseFloat(sel_data.mapMT1).toFixed(2) + "<br>";
-                    entry += "<br>" + sel_data.desc.replace(/ /g, "<br>") + "</th></tr>";
+                        entry += "Y486_map:" + parseFloat(sel_data.mY).toFixed(2) + " MT1_map:" + parseFloat(sel_data.mM).toFixed(2) + "<br>";
+                    entry += "<br>" + sel_data.d.replace(/ /g, "<br>") + "</th></tr>";
                     $("#tabResults").append(entry);
                 } else {
                     $("#tr_" + sel_id).remove();
@@ -170,11 +192,10 @@ $('#btnSearch').click(
             var re_search = new RegExp(search);
             var circles = d3.selectAll("circle");
             circles.each(function(d) {
-                desc = d.desc;
+                desc = d.d
                 if (desc.match(search)) {
-                    d3.select(this).style("r", "4").style("fill-opacity", "0.8")
+                    d3.select(this).attr("r", "4")
                        .classed("unsel", false).classed("sel", true)
-                       .style("stroke", "black").style("stroke-width", 1)
                 }
             });
         }
@@ -185,8 +206,8 @@ $('#btnUnsel').click(
     function() {
         var circles = d3.selectAll(".sel")
         circles.each(function(d) {
-            d3.select(this).style("r", "2").style("fill-opacity", "0.7")
-               .classed("unsel", true).classed("sel", false).style("stroke-width", 0)
+            d3.select(this).attr("r", "2")
+               .classed("unsel", true).classed("sel", false)
         });
     });
 
@@ -226,25 +247,26 @@ function callback_fun(json) {
 
 
     data.forEach(function(d) {
-        d.cx = +d.cx;
-        d.cy = +d.cy;
+        d.x = +d.x;
+        d.y = +d.y;
         d.gc = +d.gc;
         d.oi = +d.oi;
+        d.l = +d.l;
         d.oe = +d.oe;
     });
 
     var xMax = d3.max(data, function(d) {
-            return d.cx;
+            return d.x;
         }) * 1.05,
         xMin = d3.min(data, function(d) {
-            return d.cx;
+            return d.x;
         }),
         xMin = xMin > 0 ? 0 : xMin,
         yMax = d3.max(data, function(d) {
-            return d.cy;
+            return d.y;
         }) * 1.05,
         yMin = d3.min(data, function(d) {
-            return d.cy;
+            return d.y;
         }),
         yMin = yMin > 0 ? 0 : yMin;
 
@@ -344,7 +366,6 @@ function callback_fun(json) {
         .classed("axisLine vAxisLine", true)
         .attr("x1", 0).attr("y1", 0)
         .attr("x2", 0).attr("y2", height);
-
     objects.selectAll(".dot")
         .data(data).enter().append("circle")
         .classed("dot", true).classed("unsel", true)
@@ -353,16 +374,6 @@ function callback_fun(json) {
             return d.id.replace(".","_");
         })
         .attr("transform", transform)
-        .attr("title", function(d) {
-            line = "<strong>" + d.id + "</strong><br>OI: " + d.oi + "<br>OE: " +  d.oe + "<br>GC: " + d.gc
-            if (selStrain == "Y486")
-                return line + "<br>MT1 map:" + d.mapMT1 + "<br>Liem map:" + d.mapLiem + "<br>" + d.desc.replace(/ /g, "<br>");
-            else if (selStrain == "MT1")
-                return line + "<br>Y486 map:" + d.mapY486 + "<br>Liem map:" + d.mapLiem + "<br>" + d.desc.replace(/ /g, "<br>");
-            else if (selStrain == "Liem")
-                return line + "<br>Y486 map:" + d.mapY486 + "<br>MT1 map:" + d.mapMT1 + "<br>" + d.desc.replace(/ /g, "<br>");
-
-        })
         .style("fill", function(d) {
             if (selection == "Orfogenic index")
                 return color(d.oi);
@@ -512,7 +523,7 @@ function callback_fun(json) {
                     d3.selectAll(".dot")
                         .style('visibility','visible')
                         .style("fill", function(d) {
-                            return color(d.mapMT1);
+                            return color(d.mM);
                         })
                 } else if (selection == "Liem mapping") {                
                     build_slider(0,1,0.05, "Proportion of Liem mapping: ");
@@ -533,7 +544,7 @@ function callback_fun(json) {
                     d3.selectAll(".dot")
                         .style('visibility','visible')
                         .style("fill", function(d) {
-                            return color(d.mapLiem);
+                            return color(d.mL);
                     })
                 } else if (selection == "Y486 mapping") {                
                     build_slider(0,1,0.05, "Proportion of Y486 mapping: ");
@@ -554,7 +565,7 @@ function callback_fun(json) {
                     d3.selectAll(".dot")
                         .style('visibility','visible')
                         .style("fill", function(d) {
-                            return color(d.mapY486);
+                            return color(d.mY);
                         })
                 }
             }
@@ -567,7 +578,6 @@ function callback_fun(json) {
     }
 
     function transform(d) {
-        return "translate(" + x(d.cx) + "," + y(d.cy) + ")";
+        return "translate(" + x(d.x) + "," + y(d.y) + ")";
     } 
 }
-
