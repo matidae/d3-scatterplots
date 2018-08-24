@@ -1,7 +1,7 @@
-# T. vivax plots
+## T. vivax plots
 PCA analysis of T.vivax genome
 
-### d3 scatterplot
+### [Interactive PCA plots](http://bioinformatica.fcien.edu.uy/vivax/pca/scatter4/scatter.html)
 <pre>
 webpage/
   loader.css  
@@ -9,7 +9,8 @@ webpage/
   scatter-fun.js  
   scatter.html
  </pre>
- ### Jupyter notebook
+ ### [Genome analysis notebook](https://github.com/matidae/vivax_plots/blob/master/plots_R.ipynb)
  <pre>
  plots_R.ipynb
  </pre>
+
