@@ -1,0 +1,105 @@
+#scatter{
+  float: left;
+  width: 70%;
+  height: 90%;
+  visibility: hidden;
+  margin-left: 5px;
+  position: fixed;
+  left: 1em;
+  top: 3em;
+}
+
+#title{
+  visibility: hidden; 
+  margin-top: 1em;
+  margin-left: 2em;
+}
+#div_right{
+  float: right;
+  width: 30%;
+  visibility: hidden;
+  position: fixed;
+  right: 0em;
+  margin-left: 5em;
+  top: 3em;
+}
+
+#div_control{
+  margin-bottom: 0px;
+  position: fixed;
+  margin-left: 5em;
+}
+
+#div_results{
+  position: relative;
+  top: 20em;
+  overflow-y: auto;
+  height: 360px;
+  margin-left: 5em;
+}
+
+rect {
+  fill: transparent;
+  shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.1);
+  shape-rendering: crispEdges;
+}
+
+.axisLine {
+  fill: none;
+  shape-rendering: crispEdges;
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 2px;
+}
+
+.dot {
+  fill-opacity: .6;
+}
+
+th{
+  font-family: sans;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+.th_right{
+  text-align: right;
+}
+
+.th_left{
+  text-align: left;
+}
+
+/*LOADER*/
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+  visibility:visible;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url(Preloader_8.gif) center no-repeat #fff;
+}
+ul.ui-autocomplete.ui-menu{
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 8px;
+}
+
+#amount{
+  width:80px;
+  background-color:white;
+  font-size: 12px;
+}
+
+.sel{
+  stroke:black;
+  stroke-width:1px;	
+}
